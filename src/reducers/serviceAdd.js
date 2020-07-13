@@ -4,7 +4,6 @@ import {
   ADD_SERVICE_FAILURE,
   ADD_SERVICE_SUCCESS,
   EDIT_SERVICE,
-  FETCH_EDIT_SERVICE,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -44,14 +43,15 @@ export default function serviceAddReducer(state = initialState, action) {
         },
       };
     case EDIT_SERVICE:
-      const { res } = action.payload;
+      const { arr, id } = action.payload;
+      const res = arr.filter((service) => service.id === Number(id));
       return {
         ...state,
         item: {
-          id: res && res[0].id,
-          name: res && res[0].name,
-          price: res && Number(res[0].price),
-          content: res && res[0].content,
+          id: res[0].id,
+          name: res[0].name,
+          price: Number(res[0].price),
+          content: res[0].content,
         },
         edit: true,
         loading: false,

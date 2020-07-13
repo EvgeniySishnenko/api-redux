@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   changeServiceField,
   addService,
-  editService,
+  getEditService,
   fetchEditService,
 } from "../actions/actionCreators";
 
@@ -31,11 +31,7 @@ function ServiceAdd({ match, history }) {
     [dispatch, item]
   );
   useEffect(() => {
-    const res = items.filter(
-      (service) => service.id === Number(match.params.id)
-    );
-    // dispatch(editService(match.params.id));
-    dispatch(editService(res, history));
+    dispatch(getEditService(match.params.id));
   }, [match.params.id]);
   const handleClose = (e) => {
     e.preventDefault();

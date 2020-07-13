@@ -6,7 +6,6 @@ import {
   ADD_SERVICE_REQUEST,
   ADD_SERVICE_FAILURE,
   ADD_SERVICE_SUCCESS,
-  REMOVE_SERVICE,
   EDIT_SERVICE,
 } from "./actionTypes";
 
@@ -55,44 +54,41 @@ export const changeServiceField = (name, value) => ({
   },
 });
 
-export const editService = (res) => ({
+export const editService = (arr, id) => ({
   type: EDIT_SERVICE,
-  payload: { res },
+  payload: { arr, id },
 });
-// export const displayValue = (res) => ({
-//   type: EDIT_SERVICE,
-//   payload: {
-//     res,
-//   },
-// });
-// export const editService = (id) => async (dispatch) => {
-//   try {
-//     const response = await fetch(`${process.env.REACT_APP_API_URL}/${id}`, {
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//     });
-//     if (!response.ok) {
-//       throw new Error(response.statusText);
-//     }
-//     const data = await response.json();
-//     dispatch(displayValue(data));
-//   } catch (e) {
-//     dispatch(addServiceFailure(e.message));
-//   }
-// };
+
+export const getEditService = (id) => async (dispatch) => {
+  dispatch(addServiceRequest());
+
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    const data = await response.json();
+    dispatch(editService(data, id));
+  } catch (e) {
+    dispatch(addServiceFailure(e.message));
+  }
+};
 export const fetchEditService = (item, history) => async (dispatch) => {
   dispatch(addServiceRequest());
   try {
     const response = await fetch(`${process.env.REACT_APP_API_URL}`, {
-      method: "POST",
+      method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
     });
     if (!response.ok) {
       throw new Error(response.statusText);
     }
-    history.push("/services");
     dispatch(addServiceSuccess());
+    history.push("/services");
 
     dispatch(fetchServices());
   } catch (e) {
